@@ -23,6 +23,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="BattleNetApi">
+      <HintPath>..\..\..\Dropbox\Services\BattleNetApi.dll</HintPath>
+    </Reference>
     <Reference Include="MovieService">
       <HintPath>D:\Dropbox\Services\MovieService.dll</HintPath>
     </Reference>
