@@ -43,12 +43,14 @@ namespace ButlerCore.Tests
         {
             List<Movie> list = Cut.GetMovieList();
             Assert.IsNotNull(list);
-            list = list.Where(l => l.Title == "Rebel Moon 2").ToList();
+            list = list.Where(l => l.Title == "Rebel Moon 2")
+                .ToList();
             foreach (var movie in list)
             {
                 if (Cut.IsMarkdownFor(movie.Title))
                 {
-                    Console.WriteLine($"{Cut.MarkdownFileName(movie.Title)} already exists");
+                    Console.WriteLine(
+                        $"{Cut.MarkdownFileName(movie.Title)} already exists");
                     continue;
                 }
 

@@ -1,5 +1,6 @@
 ﻿using ButlerCore.Jobs;
 using ButlerCore.Models;
+using System.Runtime.CompilerServices;
 
 namespace ButlerCore.Tests
 {
@@ -42,7 +43,9 @@ namespace ButlerCore.Tests
         {
             List<Tv> list = Cut.GetTvList();
             Assert.IsNotNull(list);
-            list = list.Where(l => l.Title == "Borat").ToList();
+            list = list
+                .Where(l => l.Title == "Alien Earth")
+                .ToList();
             foreach (var Tv in list)
             {
                 if (Cut.IsMarkdownFor(Tv.Title))
@@ -207,25 +210,48 @@ namespace ButlerCore.Tests
         }
 
         [TestMethod]
-        public void TvDetector_CanCreateMarkdownFile()
+        public async Task  TvDetector_CanCreateMarkdown()
         {
-            var markdown = TvJobMaster.TvToMarkdown(
+            var tvMaster = new TvJobMaster(
+                new NullLogger(),
+                "d:\\Dropbox\\",
+                "t:\\");
+            var markdown = await tvMaster.TvToMarkdown(
                 new Tv
                 {
-                    Title = "Akira"
-                });
+                    Title = "Alien Earth"
+                },
+                new MovieService.MovieService());
 
             Assert.IsTrue(!string.IsNullOrEmpty(markdown));
             Console.WriteLine(markdown);
         }
 
         [TestMethod]
-        public void TvDetector_CanSaveTvFile()
+        public async Task TvDetector_CanCreateMarkdownFile()
         {
-            var success = Cut?.WriteTvMarkdown(
+            var tvMaster = new TvJobMaster(
+                new NullLogger(),
+                "d:\\Dropbox\\",
+                "t:\\");
+            var markdown = await tvMaster.TvToMarkdown(
                 new Tv
                 {
-                    Title = "The Magnificent Seven Ride",
+                    Title = "Alien Earth"
+                },
+                new MovieService.MovieService());
+
+            Assert.IsTrue(!string.IsNullOrEmpty(markdown));
+            Console.WriteLine(markdown);
+        }
+
+        [TestMethod]
+        public async Task TvDetector_CanSaveTvFile()
+        {
+            var success = await Cut?.WriteTvMarkdown(
+                new Tv
+                {
+                    Title = "Alien Earth",
                 });
             Assert.IsTrue(success);
         }
