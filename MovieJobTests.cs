@@ -12,9 +12,9 @@ namespace ButlerCore.Tests
         public void Setup()
         {
             Cut = new MovieJobMaster(
-                new NullLogger(),
-                "d:\\Dropbox\\",
-                "m:\\");
+                logger: new NullLogger(),
+                dropBoxFolder: "d:\\Dropbox\\",
+                movieRootFolder: "m:\\");
         }
 
         [TestMethod]
@@ -43,12 +43,14 @@ namespace ButlerCore.Tests
         {
             List<Movie> list = Cut.GetMovieList();
             Assert.IsNotNull(list);
-            list = list.Where(l => l.Title == "Rebel Moon 2").ToList();
+            list = list.Where(l => l.Title == "Rebel Moon 2")
+                .ToList();
             foreach (var movie in list)
             {
                 if (Cut.IsMarkdownFor(movie.Title))
                 {
-                    Console.WriteLine($"{Cut.MarkdownFileName(movie.Title)} already exists");
+                    Console.WriteLine(
+                        $"{Cut.MarkdownFileName(movie.Title)} already exists");
                     continue;
                 }
 
@@ -162,7 +164,10 @@ namespace ButlerCore.Tests
         public void MovieDetector_KnowsWatchedMovie()
         {
             var haveWatched = Cut?.Watched(
-                new Movie("Mean Machine", string.Empty));
+                new Movie(
+                    "Mean Machine", 
+                    string.Empty,
+                    "Mean Machine.mp4"));
 
             Assert.IsTrue(haveWatched);
         }
@@ -171,7 +176,10 @@ namespace ButlerCore.Tests
         public void MovieDetector_KnowsUnWatchedMovie()
         {
             var haveWatched = Cut?.Watched(
-                new Movie("Polar", string.Empty));
+                new Movie(
+                    "Wicked For Good", 
+                    string.Empty,
+                    "Wicked For Good.mp4"));
 
             Assert.IsFalse(haveWatched);
         }
@@ -198,7 +206,8 @@ namespace ButlerCore.Tests
         [TestMethod]
         public void MovieDetector_CanParseOutYearSquareBrackets()
         {
-            var movie = MovieJobMaster.ParseMovie("Akira [2020]");
+            var fileInfo = new FileInfo("D:\\Movies\\Akira [2020] [1080p].mkv");
+            var movie = MovieJobMaster.ParseMovie(fileInfo);
 
             Console.WriteLine($"{movie.Title} {movie.Year}");
 
@@ -209,7 +218,8 @@ namespace ButlerCore.Tests
         [TestMethod]
         public void MovieDetector_CanParseOutYearRoundBrackets()
         {
-            var movie = MovieJobMaster.ParseMovie("Akira (2020)");
+            var fileInfo = new FileInfo("D:\\Movies\\Akira (2020) [1080p].mkv");
+            var movie = MovieJobMaster.ParseMovie(fileInfo);
 
             Console.WriteLine($"{movie.Title} {movie.Year}");
 
@@ -220,11 +230,13 @@ namespace ButlerCore.Tests
         [TestMethod]
         public void MovieDetector_CanParseOutTitle()
         {
-            var movie = MovieJobMaster.ParseMovie("Akira");
+            var fileInfo = new FileInfo("D:\\Movies\\Akira (1988) [1080p].mkv");
+            var movie = MovieJobMaster.ParseMovie(fileInfo);
 
-            Console.WriteLine($"{movie.Title} {movie.Year}");
+            Console.WriteLine($"{movie.Title} {movie.Year} {movie.FileName}");
 
             Assert.IsTrue(movie.Title == "Akira");
+            Assert.IsTrue(movie.FileName == "Akira (1988) [1080p].mkv");
         }
 
         [TestMethod]
@@ -233,7 +245,9 @@ namespace ButlerCore.Tests
             var markdown = MovieJobMaster.MovieToMarkdown(
                 new Movie 
                 {
-                    Title = "Akira" 
+                    Title = "Akira",
+                    Year = "1988",
+                    FileName = "Akira (1988) [1080p].mkv"
                 },
                 new MovieService.MovieService());
 
@@ -263,10 +277,10 @@ namespace ButlerCore.Tests
             {
                 if (Cut.IsMarkdownFor(movie.Title))
                 {
-                    Console.WriteLine($"Overwriting {Cut.MarkdownFileName(movie.Title)}");
+                    Console.WriteLine($"Overwriting {Cut?.MarkdownFileName(movie.Title)}");
                 }
 
-                Cut.WriteMovieMarkdown(
+                Cut?.WriteMovieMarkdown(
                     movie,
                     new MovieService.MovieService());
             }
