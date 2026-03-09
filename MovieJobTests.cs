@@ -13,10 +13,10 @@ namespace ButlerCore.Tests
         {
             Cut = new MovieJobMaster(
                 logger: new NullLogger(),
-               // dropBoxFolder: "d:\\Dropbox\\",
-                dropBoxFolder: "c:\\users\\quart\\dropbox\\",
-                //movieRootFolder: "m:\\");
-                movieRootFolder: "c:\\users\\quart\\dropbox\\testdata\\movies\\");
+                dropBoxFolder: "d:\\Dropbox\\",
+                //dropBoxFolder: "c:\\users\\quart\\dropbox\\",
+                movieRootFolder: "m:\\");
+                //movieRootFolder: "c:\\users\\quart\\dropbox\\testdata\\movies\\");
         }
 
         [TestMethod]
