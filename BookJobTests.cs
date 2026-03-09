@@ -13,7 +13,7 @@ namespace ButlerCore.Tests
         {
             Cut = new BookJobMaster(
                 logger: new NullLogger(),
-                dropBoxFolder: ":\\IT\\",
+                dropBoxFolder: "d:/Dropbox/",
                 bookFolders: new string[] 
                 {
                     "b:/IT/",
