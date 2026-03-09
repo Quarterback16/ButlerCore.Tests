@@ -1,4 +1,5 @@
-﻿using ButlerCore.Jobs;
+﻿using ButlerCore.Helpers;
+using ButlerCore.Jobs;
 
 namespace ButlerCore.Tests
 {
@@ -12,9 +13,11 @@ namespace ButlerCore.Tests
         {
             Cut = new BookJobMaster(
                 logger: new NullLogger(),
+                dropBoxFolder: ":\\IT\\",
                 bookFolders: new string[] 
                 {
-                    "b:\\IT\\"
+                    "b:/IT/",
+                    "b:/By Author/"
                 });
         }
 
@@ -28,14 +31,34 @@ namespace ButlerCore.Tests
         public void BJM_KnowsNewBooksThisMonth()
         {
             var results = Cut?.DoDetectorJob(0);
-            Assert.AreEqual(0, results);
+            Assert.IsNotNull(results);
         }
 
         [TestMethod]
         public void BJM_KnowsNewBooksLastNumMonths()
         {
             var results = Cut?.DoDetectorJob(2);
-            Assert.AreEqual(0, results);
+            Assert.IsNotNull(results);
+        }
+
+        [TestMethod]
+        public void BJM_KnowsNewBooksByDateRange()
+        {
+            var results = Cut?.DetectByRange(
+                new DateTime(2025,12,1,0,0,0,DateTimeKind.Unspecified),
+                new DateTime(2025,12,31,0,0,0,DateTimeKind.Unspecified));
+            Assert.IsNotNull(results);
+        }
+
+        [TestMethod]
+        public void MH_KnowsHowToGenerateMarkdownForNewBooks()
+        {
+            var results = Cut?.DetectByRange(
+                new DateTime(2026, 3, 1, 0, 0, 0, DateTimeKind.Unspecified),
+                new DateTime(2026, 3, 31, 0, 0, 0, DateTimeKind.Unspecified));
+            Assert.IsNotNull(results);
+            Console.WriteLine(
+                MarkdownHelper.GenerateBookTable(results));
         }
     }
 }

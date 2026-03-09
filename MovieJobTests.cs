@@ -65,6 +65,7 @@ namespace ButlerCore.Tests
         [TestMethod]
         public void MovieDetector_CanUpdateMovieWithPosterWhereMdDoesNotExist()
         {
+            Assert.IsNotNull(Cut);    // optional safety check
             List<Movie> list = Cut.GetMovieList();
             Assert.IsNotNull(list);
             foreach (var movie in list)
@@ -244,7 +245,7 @@ namespace ButlerCore.Tests
         [TestMethod]
         public void MovieDetector_CanCreateMarkdownFile()
         {
-            var markdown = MovieJobMaster.MovieToMarkdown(
+            var markdown = Cut?.MovieToMarkdown(
                 new Movie 
                 {
                     Title = "Akira",
@@ -272,7 +273,8 @@ namespace ButlerCore.Tests
         [TestMethod]
         public void MovieDetector_CanOverwriteSingleMovie()
         {
-            List<Movie> list = Cut.GetMovieList();
+            Assert.IsNotNull(Cut);    // optional safety check
+            var list = Cut?.GetMovieList();
             Assert.IsNotNull(list);
             list = list.Where(l => l.Title == "The Shawshank Redemption").ToList();
             foreach (var movie in list)

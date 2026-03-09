@@ -1,6 +1,5 @@
 ﻿using ButlerCore.Jobs;
 using ButlerCore.Models;
-using System.Runtime.CompilerServices;
 
 namespace ButlerCore.Tests
 {
@@ -39,8 +38,9 @@ namespace ButlerCore.Tests
         }
 
         [TestMethod]
-        public void TvDetector_CanDoSingleTv()
+        public async Task TvDetector_CanDoSingleTv()
         {
+            Assert.IsNotNull(Cut);    // optional safety check
             List<Tv> list = Cut.GetTvList();
             Assert.IsNotNull(list);
             list = list
@@ -54,7 +54,7 @@ namespace ButlerCore.Tests
                     continue;
                 }
 
-                Cut.WriteTvMarkdown(Tv);
+                await Cut.WriteTvMarkdown(Tv);
             }
         }
 
@@ -212,29 +212,7 @@ namespace ButlerCore.Tests
         [TestMethod]
         public async Task  TvDetector_CanCreateMarkdown()
         {
-            var tvMaster = new TvJobMaster(
-                new NullLogger(),
-                "d:\\Dropbox\\",
-                "t:\\");
-            var markdown = await tvMaster.TvToMarkdown(
-                new Tv
-                {
-                    Title = "Alien Earth"
-                },
-                new MovieService.MovieService());
-
-            Assert.IsTrue(!string.IsNullOrEmpty(markdown));
-            Console.WriteLine(markdown);
-        }
-
-        [TestMethod]
-        public async Task TvDetector_CanCreateMarkdownFile()
-        {
-            var tvMaster = new TvJobMaster(
-                new NullLogger(),
-                "d:\\Dropbox\\",
-                "t:\\");
-            var markdown = await tvMaster.TvToMarkdown(
+            var markdown = await TvJobMaster.TvToMarkdown(
                 new Tv
                 {
                     Title = "Alien Earth"
@@ -248,7 +226,9 @@ namespace ButlerCore.Tests
         [TestMethod]
         public async Task TvDetector_CanSaveTvFile()
         {
-            var success = await Cut?.WriteTvMarkdown(
+            Assert.IsNotNull(Cut);    // optional safety check
+
+            var success = await Cut.WriteTvMarkdown(
                 new Tv
                 {
                     Title = "Alien Earth",
