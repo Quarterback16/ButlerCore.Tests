@@ -35,6 +35,30 @@ namespace ButlerCore.Tests
         }
 
         [TestMethod]
+        public void ProgramCanRunBookJobs()
+        {
+            var result = Program.BookJobs(
+                new ButlerCoreContext
+                {
+                    Logger = new NullLogger(),
+                    DropBoxFolder = "d:/Dropbox/",
+                    HostName = "Elsie",
+                    KatlaBookFolders =
+                    [
+                        "b:/IT/",
+                        "b:/By Author/"
+                    ],
+                    ElsieBookFolders =
+                    [
+                        "b:/IT/", 
+                        "b:/By Author/" 
+                    ],
+                });
+            Assert.IsNotNull(result);
+            Assert.AreEqual(0, result);
+        }
+
+        [TestMethod]
         public void BJM_KnowsNewBooksLastNumMonths()
         {
             var results = Cut?.DoDetectorJob(2);
