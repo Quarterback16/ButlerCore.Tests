@@ -70,5 +70,16 @@
             Console.WriteLine(md);
         }
 
+
+        [TestMethod]
+        public void CanDoMarcoReport()
+        {
+            var ts = new TipItService.TipItService(
+                "d://dropbox//");
+            var md = ts.MarcoReport();
+            Assert.IsNotNull(md);
+            Console.WriteLine(md);
+        }
+
     }
 }
