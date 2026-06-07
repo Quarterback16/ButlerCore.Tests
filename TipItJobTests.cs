@@ -1,4 +1,6 @@
-﻿namespace ButlerCore.Tests
+﻿using ButlerCore.Helpers;
+
+namespace ButlerCore.Tests
 {
     [TestClass]
     public class TipItJobTests
@@ -11,8 +13,8 @@
                 {
                     TippingSeason = DateTime.Now.Year,
                     Logger = new NullLogger(),
-                    DropBoxFolder = "d:/Dropbox/",
-                    ResultsFile = "d:/Dropbox/json/results.json",
+                    DropBoxFolder = DropBoxFolder(),
+                    ResultsFile = $"{DropBoxFolder()}json/results.json",
                     StartDateTime = DateTime.Now,
                 });
             Assert.IsNotNull(result);
@@ -23,7 +25,7 @@
         public void CanCalculateNewTippingState()
         {
             var ts = new TipItService.TipItService(
-                "d://dropbox//");
+                DropBoxFolder());
 
             var newState = ts.GetNewTippingState(
                 new DateTime(2026,3,21,0,0,0,DateTimeKind.Unspecified));
@@ -36,6 +38,8 @@
                 });
         }
 
+        private string DropBoxFolder() => FolderHelper.DropboxFolder();
+
         [TestMethod]
         public void CanCalculateNewTippingStateOverADateRange()
         {
@@ -43,7 +47,7 @@
             var startDate = DateTime.Now.AddDays(-10);
 
             var ts = new TipItService.TipItService(
-                "d://dropbox//");
+                DropBoxFolder());
 
             for (int i = 0; i < 10; i++)
             {
@@ -64,7 +68,7 @@
         public void CanDoEasiest()
         {
             var ts = new TipItService.TipItService(
-                "d://dropbox//");
+                DropBoxFolder());
             var md = ts.Easiest();
             Assert.IsNotNull(md);
             Console.WriteLine(md);
