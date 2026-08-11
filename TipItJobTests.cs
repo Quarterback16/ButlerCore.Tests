@@ -85,5 +85,15 @@ namespace ButlerCore.Tests
             Console.WriteLine(md);
         }
 
+        [TestMethod]
+        public void CanDoLatestResults()
+        {
+            var ts = new TipItService.TipItService(
+                "d://dropbox//");
+            var md = ts.LatestResults();
+            Assert.IsNotNull(md);
+            Console.WriteLine(md);
+        }
+
     }
 }

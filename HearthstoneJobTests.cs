@@ -20,17 +20,21 @@ namespace ButlerCore.Tests
 		[TestMethod]
 		public void HJM_CanDoMetaChampionReport()
 		{
+			var result = Cut?.DoMetaChampReport();	
 			Assert.IsFalse(
 				string.IsNullOrWhiteSpace(
-					Cut?.DoMetaChampReport()));
+					result));
+			Console.WriteLine(result);
 		}
 
 		[TestMethod]
 		public void HJM_CanDoChampDeckReport()
 		{
+			var result = Cut?.DoChampDeckReport();
 			Assert.IsFalse(
 				string.IsNullOrWhiteSpace(
-					Cut?.DoChampDeckReport()));
+					result));
+			Console.WriteLine(result);
 		}
 
 		[TestMethod]
